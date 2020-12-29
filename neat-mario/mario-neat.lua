@@ -155,7 +155,6 @@ function evaluateNetwork(network, inputs, inputDeltas)
 
 	for i=1,Inputs do
 		network.neurons[i].value = inputs[i] * inputDeltas[i]
-		--network.neurons[i].value = inputs[i]
 	end
 	
 	for _,neuron in pairs(network.neurons) do
@@ -624,7 +623,6 @@ function newGeneration()
 	
 	pool.generation = pool.generation + 1
 	
-	--writeFile("backup." .. pool.generation .. "." .. forms.gettext(saveLoadFile))
 	writeFile(forms.gettext(saveLoadFile) .. ".gen" .. pool.generation .. ".pool")
 end
 	
@@ -709,9 +707,6 @@ end
 form = forms.newform(500, 500, "Mario-Neat")
 netPicture = forms.pictureBox(form, 5, 250,470, 200)
 
-
---int forms.pictureBox(int formhandle, [int? x = null], [int? y = null], [int? width = null], [int? height = null]) 
-
 function displayGenome(genome)
 	forms.clear(netPicture,0x80808080)
 	local network = genome.network
@@ -746,7 +741,7 @@ function displayGenome(genome)
 		else
 			color = 0xFF000000
 		end
-		--gui.drawText(223, 24+8*o, config.ButtonNames[o], color, 9)
+
 		forms.drawText(netPicture,223, 24+8*o, config.ButtonNames[o], color, 9)
 	end
 	
@@ -797,9 +792,8 @@ function displayGenome(genome)
 		end
 	end
 	
-	--gui.drawBox(50-config.BoxRadius*5-3,70-config.BoxRadius*5-3,50+config.BoxRadius*5+2,70+config.BoxRadius*5+2,0xFF000000, 0x80808080)
+
 	forms.drawBox(netPicture, 50-config.BoxRadius*5-3,70-config.BoxRadius*5-3,50+config.BoxRadius*5+2,70+config.BoxRadius*5+2,0xFF000000, 0x80808080)
-	--oid forms.drawBox(int componenthandle, int x, int y, int x2, int y2, [color? line = null], [color? background = null]) 
 	for n,cell in pairs(cells) do
 		if n > Inputs or cell.value ~= 0 then
 			local color = math.floor((cell.value+1)/2*256)
@@ -811,7 +805,6 @@ function displayGenome(genome)
 			end
 			color = opacity + color*0x10000 + color*0x100 + color
 			forms.drawBox(netPicture,cell.x-2,cell.y-2,cell.x+2,cell.y+2,opacity,color)
-			--gui.drawBox(cell.x-2,cell.y-2,cell.x+2,cell.y+2,opacity,color)
 		end
 	end
 	for _,gene in pairs(genome.genes) do
@@ -829,22 +822,14 @@ function displayGenome(genome)
 			else
 				color = opacity + 0x800000 + 0x100*color
 			end
-			--gui.drawLine(c1.x+1, c1.y, c2.x-3, c2.y, color)
 			forms.drawLine(netPicture,c1.x+1, c1.y, c2.x-3, c2.y, color)
 		end
 	end
 	
-	--gui.drawBox(49,71,51,78,0x00000000,0x80FF0000)
 	forms.drawBox(netPicture, 49,71,51,78,0x00000000,0x80FF0000)
-	--if forms.ischecked(showMutationRates) then
 		local pos = 100
 		for mutation,rate in pairs(genome.mutationRates) do
-			--gui.drawText(100, pos, mutation .. ": " .. rate, 0xFF000000, 10)
 			forms.drawText(netPicture,100, pos, mutation .. ": " .. rate, 0xFF000000, 10)
-			--forms.drawText(pictureBox,400,pos, mutation .. ": " .. rate)
-			
-			--void forms.drawText(int componenthandle, int x, int y, string message, [color? forecolor = null], [color? backcolor = null], [int? fontsize = null], [string fontfamily = null], [string fontstyle = null], [string horizalign = null], [string vertalign = null]) 
-
 			pos = pos + 8
 		end
 	--end
@@ -935,15 +920,8 @@ function loadFile(filename)
                                 local gene = newGene()
                                 local enabled
 								
-								local geneStr = file:read("*line")
-								local geneArr = mysplit(geneStr)
-								gene.into = tonumber(geneArr[1])
-								gene.out = tonumber(geneArr[2])
-								gene.weight = tonumber(geneArr[3])
-								gene.innovation = tonumber(geneArr[4])
-								enabled = tonumber(geneArr[5])
-
-
+                                gene.into, gene.out, gene.weight, gene.innovation, enabled = file:read("*number", "*number", "*number", "*number", "*number")
+                
                                 if enabled == 0 then
                                         gene.enabled = false
                                 else
@@ -975,8 +953,7 @@ function flipState()
 end
  
 function loadPool()
-	filename = forms.openfile("DP1.state.pool",config.PoolDir) 
-	--local filename = forms.gettext(saveLoadFile)
+	filename = forms.openfile(config.State[1] .. ".pool",config.PoolDir) 
 	forms.settext(saveLoadFile, filename)
 	loadFile(filename)
 end
@@ -1089,25 +1066,27 @@ while true do
 		local coins = game.getCoins() - startCoins
 		local score = game.getScore() - startScore
 		
-		--console.writeline("Coins: " .. coins .. " score: " .. score)
+		console.writeline("Coins: " .. coins .. " score: " .. score)
 
-		local coinScoreFitness = (coins * 50) + (score * 0.2)
-		if (coins + score) > 0 then 
-			console.writeline("Coins and Score added " .. coinScoreFitness .. " fitness")
+		local coinScoreFitness = (coins * 0) + (score * 0.1)
+		if (coins + score) > 0 then
+			console.writeline("Score added " .. coinScoreFitness .. " fitness")
 		end
 		
 		local hitPenalty = marioHitCounter * 100
 		local powerUpBonus = powerUpCounter * 100
 	
-		local fitness = coinScoreFitness - hitPenalty + powerUpBonus + rightmost - pool.currentFrame / 2
+		--local fitness = coinScoreFitness - hitPenalty + powerUpBonus + rightmost - pool.currentFrame / 2
+        
+        local fitness = rightmost*1.4 + coinScoreFitness - pool.currentFrame/3 - hitPenalty*5
 
-		if startLives < Lives then
-			local ExtraLiveBonus = (Lives - startLives)*1000
-			fitness = fitness + ExtraLiveBonus
-			console.writeline("ExtraLiveBonus added " .. ExtraLiveBonus)
-		end
-
-		if rightmost > 4816 then
+		--if startLives < Lives then
+		--	local ExtraLiveBonus = (Lives - startLives)*1000
+		--	fitness = fitness + ExtraLiveBonus
+		--	console.writeline("ExtraLiveBonus added " .. ExtraLiveBonus)
+		--end
+		
+		if rightmost > 4500 then
 			fitness = fitness + 1000
 			console.writeline("!!!!!!Beat level!!!!!!!")
 		end
@@ -1118,11 +1097,10 @@ while true do
 		
 		if fitness > pool.maxFitness then
 			pool.maxFitness = fitness
-			--writeFile("backup." .. pool.generation .. "." .. forms.gettext(saveLoadFile))
 			writeFile(forms.gettext(saveLoadFile) .. ".gen" .. pool.generation .. ".pool")
 		end
 		
-		console.writeline("Gen " .. pool.generation .. " species " .. pool.currentSpecies .. " genome " .. pool.currentGenome .. " fitness: " .. fitness)
+		console.writeline("Gen " .. pool.generation .. " species " .. pool.currentSpecies .. " genome " .. pool.currentGenome .. " fitness: " .. math.floor(fitness) .. " progress:  " .. rightmost)
 		pool.currentSpecies = 1
 		pool.currentGenome = 1
 		while fitnessAlreadyMeasured() do
@@ -1143,11 +1121,11 @@ while true do
 	end
 	
 	gui.drawEllipse(game.screenX-84, game.screenY-84, 192, 192, 0x50000000) 
-	forms.settext(FitnessLabel, "Fitness: " .. math.floor(rightmost - (pool.currentFrame) / 2 - (timeout + timeoutBonus)*2/3))
+	forms.settext(FitnessLabel, "Progress: " .. math.floor(rightmost)) -- - (pool.currentFrame) / 2)) -(timeout + timeoutBonus)*2/3))
 	forms.settext(GenerationLabel, "Generation: " .. pool.generation)
 	forms.settext(SpeciesLabel, "Species: " .. pool.currentSpecies)
 	forms.settext(GenomeLabel, "Genome: " .. pool.currentGenome)
-	forms.settext(MaxLabel, "Max: " .. math.floor(pool.maxFitness))
+	forms.settext(MaxLabel, "TopFit: " .. math.floor(pool.maxFitness))
 	forms.settext(MeasuredLabel, "Measured: " .. math.floor(measured/total*100) .. "%")
 	forms.settext(CoinsLabel, "Coins: " .. (game.getCoins() - startCoins))
 	forms.settext(ScoreLabel, "Score: " .. (game.getScore() - startScore))
@@ -1158,6 +1136,6 @@ while true do
 	pool.currentFrame = pool.currentFrame + 1
 	
 	end
-	emu.frameadvance();
+    emu.frameadvance();
 	
 end

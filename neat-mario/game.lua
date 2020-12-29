@@ -161,6 +161,8 @@ function _M.getInputs()
 	return inputs, inputDeltaDistance
 end
 
+encode = fastforward
+
 function _M.clearJoypad()
 	controller = {}
 	for b = 1,#config.ButtonNames do

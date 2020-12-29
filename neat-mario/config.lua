@@ -4,7 +4,7 @@ local _M = {}
 	Change BizhawkDir to your BizHawk directory.
 --]]
 --_M.BizhawkDir = "C:/Users/mmill/Downloads/BizHawk-2.2/"
-_M.BizhawkDir = "X:/B2_BizHawkLab/BizHawk-2.2.2/"
+_M.BizhawkDir = "C:/Games/Emulators/BizHawk 2.4.2/BizHawk-2.4.2/"
 
 _M.StateDir = _M.BizhawkDir .. "Lua/SNES/neat-mario/state/"
 _M.PoolDir = _M.BizhawkDir .. "Lua/SNES/neat-mario/pool/"
@@ -14,9 +14,10 @@ _M.PoolDir = _M.BizhawkDir .. "Lua/SNES/neat-mario/pool/"
 	Rearrange for other savestates. (will be redone soon)
 --]]
 _M.State = {
- 			"DP1.state",				-- Donut Plains 1
-			"YI1.state",				-- Yoshi's Island 1
-			"YI2.state",				-- Yoshi's Island 2
+--			"YI2.state",				-- Yoshi's Island 2
+            "DP1.state",				-- Donut Plains 1
+--			"YI1.state",				-- Yoshi's Island 1
+--          "K1part2.state",                 -- Kaizo 1
 }
 
 --[[
@@ -30,13 +31,12 @@ _M.State = {
 _M.StartPowerup = 0
 
 _M.NeatConfig = {
---Filename = "DP1.state",
 Filename = _M.PoolDir .. _M.State[1],
-Population = 300,
+Population = 200,
 DeltaDisjoint = 2.0,
 DeltaWeights = 0.4,
 DeltaThreshold = 1.0,
-StaleSpecies = 15,
+StaleSpecies = 10, -- was 15
 MutateConnectionsChance = 0.25,
 PerturbChance = 0.90,
 CrossoverChance = 0.75,
@@ -45,7 +45,7 @@ NodeMutationChance = 0.50,
 BiasMutationChance = 0.40,
 StepSize = 0.1,
 DisableMutationChance = 0.4,
-EnableMutationChance = 0.2,
+EnableMutationChance = 0.5, -- was 0.3
 TimeoutConstant = 20,
 MaxNodes = 1000000,
 }

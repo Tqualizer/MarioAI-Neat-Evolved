@@ -61,7 +61,8 @@ _M.NeutralSprites = {
 				0xDC,		-- Blue Koopa shell.
 				0xDD,		-- Yellow Koopa shell.
 				0xDF,		-- Green shell, won't use Special World color.
-				0xE0		-- 3 platforms on chains, clockwise/counter (X&1).
+				0xE0,		-- 3 platforms on chains, clockwise/counter (X&1).
+                0xB9		-- Info Box, message 1/2 (X&1).
 			}
 
 -- Make sure this list is sorted before initialization.
@@ -105,7 +106,6 @@ _M.BadSprites = {
 				0x7E,		-- Flying Red coin, worth 5 coins.
 				0x7F,		-- Flying Yellow 1-UP.
 				0xB1,		-- Creating/Eating block (X&1).
-				0xB9,		-- Info Box, message 1/2 (X&1).
 				0xBD,		-- Sliding Koopa without a shell.
 				0x0D,		-- Bob-omb.
 				0x11,		-- Buzzy Beetle.
