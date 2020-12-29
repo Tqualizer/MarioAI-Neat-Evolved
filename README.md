@@ -3,6 +3,7 @@ Update to [Seth Bling's Mar I/O][1] lua code, forked from [mam91/Neat-Genetic-Ma
 Tweaks made to learning algorithm parameters and gui.
 
 ## (Planned) additions & changes ##
+* [ ] Track learning rate in GUI
 * [ ] Full Super Mario World save state selections
 * [ ] Enhanced speed learning mode (implementing frameskip learning)
 * [ ] Train from human input parameters
