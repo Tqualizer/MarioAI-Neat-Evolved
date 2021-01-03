@@ -1,8 +1,10 @@
-# Neat[Tinkering]
+# Neat-Evolved
 Update to [Seth Bling's Mar I/O][1] lua code, forked from [mam91/Neat-Genetic-Mario][2].
 Tweaks made to learning algorithm parameters and gui.
 
-## (Planned) additions & changes ##
+Latest editions: Train from existing model + new buttons added in gui
+
+## (Planned) additions & changes 
 * [ ] Track learning rate in GUI
 * [ ] Full Super Mario World save state selections
 * [ ] Enhanced speed learning mode (implementing frameskip learning)
@@ -10,7 +12,7 @@ Tweaks made to learning algorithm parameters and gui.
 * [ ] Update GUI
 * [ ] Modularise the code better into seperate files for the GUI and Learning algoritm
 
-## Instructions
+## Instructions from mam91's repo
 1. Install [BizHawk](https://github.com/TASVideos/BizHawk) prerequesites & emulator:
    1. [BizHawk prerequesites (currently 2.1)](https://github.com/TASVideos/BizHawk-Prereqs/releases)
    2. [BizHawk (currently 2.2.2)](https://github.com/TASVideos/BizHawk/releases)
