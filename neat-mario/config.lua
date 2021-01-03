@@ -15,9 +15,10 @@ _M.PoolDir = _M.BizhawkDir .. "Lua/SNES/neat-mario/pool/"
 --]]
 _M.State = {
 --			"YI2.state",				-- Yoshi's Island 2
-            "DP1.state",				-- Donut Plains 1
+--            "DP1.state",				-- Donut Plains 1
 --			"YI1.state",				-- Yoshi's Island 1
 --          "K1part2.state",                 -- Kaizo 1
+           "FIL1.state",                --Forest Illiusion 1
 }
 
 --[[

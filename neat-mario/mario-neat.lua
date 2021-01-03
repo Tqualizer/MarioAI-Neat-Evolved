@@ -704,7 +704,7 @@ function fitnessAlreadyMeasured()
 	return genome.fitness ~= 0
 end
 
-form = forms.newform(500, 500, "Mario-Neat")
+form = forms.newform(500, 500, "Neat-Evolved")
 netPicture = forms.pictureBox(form, 5, 250,470, 200)
 
 function displayGenome(genome)
@@ -872,9 +872,19 @@ function writeFile(filename)
 end
 
 function savePool()
-	local filename = forms.gettext(saveLoadFile)
+	local filename = config.NeatConfig.Filename .. ".pool"  --- updated to be explicit
 	print(filename)
+    writeProgress()    -- add progress writer
 	writeFile(filename)
+end
+
+function writeProgress() --change from filename -----------------------------
+        local file = io.open("log.txt", "w")
+        for n,species in pairs(pool.species) do  --- write average fitness at the end of each generation?
+                file:write(species.topFitness .. "\n")
+        end
+        --file:write("IT WORKED!")
+        file:close()
 end
 
 function mysplit(inputstr, sep)
@@ -942,6 +952,7 @@ function loadFile(filename)
 		print("Pool loaded.")
 end
 
+
 function flipState()
 	if config.Running == true then
 		config.Running = false
@@ -958,6 +969,19 @@ function loadPool()
 	loadFile(filename)
 end
 
+function loadExisting()
+	filename = forms.openfile(config.State[1] .. ".pool",config.PoolDir) 
+	forms.settext(saveLoadFile, filename)
+	loadFile(filename)
+    for s,species in pairs(pool.species) do
+        for g,genome in pairs(species.genomes) do
+            genome.fitness = 0
+        end
+	end
+    pool.maxFitness = 0 
+    pool.generation = 0
+end
+
 function playTop()
 	local maxfitness = 0
 	local maxs, maxg
@@ -970,7 +994,6 @@ function playTop()
 			end
 		end
 	end
-	
 	pool.currentSpecies = maxs
 	pool.currentGenome = maxg
 	pool.maxFitness = maxfitness
@@ -984,7 +1007,7 @@ function onExit()
 	forms.destroy(form)
 end
 
-writeFile(config.PoolDir.."temp.pool")
+--writeFile(config.PoolDir.."temp.pool")
 
 event.onexit(onExit)
 
@@ -1003,11 +1026,11 @@ DmgLabel = forms.label(form, "Damage: " .. "", 230, 65, 110, 14)
 PowerUpLabel = forms.label(form, "PowerUp: " .. "", 230, 80, 110, 14)
 
 startButton = forms.button(form, "Start", flipState, 155, 102)
-
-restartButton = forms.button(form, "Restart", initializePool, 155, 102)
-saveButton = forms.button(form, "Save", savePool, 5, 102)
-loadButton = forms.button(form, "Load", loadPool, 80, 102)
-playTopButton = forms.button(form, "Play Top", playTop, 230, 102)
+--restartButton = forms.button(form, "Restart", initializePool, 155, 102)
+saveButton = forms.button(form, "Save", savePool, 230, 102)
+loadButton = forms.button(form, "Load", loadPool, 5, 102)
+Existing = forms.button(form, "Existing", loadExisting, 80, 102)
+playTopButton = forms.button(form, "Play Top", playTop, 305, 102)
 
 saveLoadFile = forms.textbox(form, config.NeatConfig.Filename .. ".pool", 170, 25, nil, 5, 148)
 saveLoadLabel = forms.label(form, "Save/Load:", 5, 129)
@@ -1097,7 +1120,7 @@ while true do
 		
 		if fitness > pool.maxFitness then
 			pool.maxFitness = fitness
-			writeFile(forms.gettext(saveLoadFile) .. ".gen" .. pool.generation .. ".pool")
+--			writeFile(config.NeatConfig.Filename .. ".gen" .. pool.generation .. ".pool")
 		end
 		
 		console.writeline("Gen " .. pool.generation .. " species " .. pool.currentSpecies .. " genome " .. pool.currentGenome .. " fitness: " .. math.floor(fitness) .. " progress:  " .. rightmost)
