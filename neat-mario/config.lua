@@ -18,7 +18,7 @@ _M.State = {
 --            "DP1.state",				-- Donut Plains 1
 --			"YI1.state",				-- Yoshi's Island 1
 --          "K1part2.state",                 -- Kaizo 1
-           "FIL1.state",                --Forest Illiusion 1
+           "FIL1.state",                --Forest Illiusion 1 
 }
 
 --[[
@@ -30,6 +30,8 @@ _M.State = {
 	Comment out to disable.
 --]]
 _M.StartPowerup = 0
+
+_M.LevelLength = 4810
 
 _M.NeatConfig = {
 Filename = _M.PoolDir .. _M.State[1],

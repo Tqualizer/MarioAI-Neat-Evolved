@@ -22,7 +22,7 @@ function newPool()
 	pool.currentGenome = 1
 	pool.currentFrame = 0
 	pool.maxFitness = 0
-	
+	pool.oldFitness = 0
 	return pool
 end
 
@@ -623,7 +623,7 @@ function newGeneration()
 	
 	pool.generation = pool.generation + 1
 	
-	writeFile(forms.gettext(saveLoadFile) .. ".gen" .. pool.generation .. ".pool")
+	writeFile(config.NeatConfig.Filename .. ".gen" .. pool.generation .. ".pool")
 end
 	
 function initializePool()
@@ -1089,12 +1089,12 @@ while true do
 		local coins = game.getCoins() - startCoins
 		local score = game.getScore() - startScore
 		
-		console.writeline("Coins: " .. coins .. " score: " .. score)
+		--console.writeline("Coins: " .. coins .. " score: " .. score)
 
 		local coinScoreFitness = (coins * 0) + (score * 0.1)
-		if (coins + score) > 0 then
-			console.writeline("Score added " .. coinScoreFitness .. " fitness")
-		end
+		--if (coins + score) > 0 then
+		--	console.writeline("Score added " .. coinScoreFitness .. " fitness")
+		--end
 		
 		local hitPenalty = marioHitCounter * 100
 		local powerUpBonus = powerUpCounter * 100
@@ -1118,12 +1118,13 @@ while true do
 		end
 		genome.fitness = fitness
 		
-		if fitness > pool.maxFitness then
-			pool.maxFitness = fitness
---			writeFile(config.NeatConfig.Filename .. ".gen" .. pool.generation .. ".pool")
+		if fitness > pool.maxFitness then --write each time the fitness improves - calculate learning rate
+			pool.oldFitness = pool.maxFitness
+            pool.maxFitness = fitness
+            console.writeline("Gen " .. pool.generation .. " species " .. pool.currentSpecies .. " genome " .. pool.currentGenome .. " Fitness inceased by: " .. math.floor(pool.maxFitness / pool.oldFitness * 100)-100 .. "%")    
 		end
 		
-		console.writeline("Gen " .. pool.generation .. " species " .. pool.currentSpecies .. " genome " .. pool.currentGenome .. " fitness: " .. math.floor(fitness) .. " progress:  " .. rightmost)
+
 		pool.currentSpecies = 1
 		pool.currentGenome = 1
 		while fitnessAlreadyMeasured() do
@@ -1144,7 +1145,7 @@ while true do
 	end
 	
 	gui.drawEllipse(game.screenX-84, game.screenY-84, 192, 192, 0x50000000) 
-	forms.settext(FitnessLabel, "Progress: " .. math.floor(rightmost)) -- - (pool.currentFrame) / 2)) -(timeout + timeoutBonus)*2/3))
+	forms.settext(FitnessLabel, "Progress: " .. math.floor(rightmost/config.LevelLength*100) .. "%") --math.floor(rightmost)) -- - (pool.currentFrame) / 2)) -(timeout + timeoutBonus)*2/3))
 	forms.settext(GenerationLabel, "Generation: " .. pool.generation)
 	forms.settext(SpeciesLabel, "Species: " .. pool.currentSpecies)
 	forms.settext(GenomeLabel, "Genome: " .. pool.currentGenome)
