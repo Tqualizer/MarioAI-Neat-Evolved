@@ -5,12 +5,12 @@ Tweaks made to learning algorithm parameters and gui.
 Latest editions: Train from existing model + new buttons added in gui
 
 ## (Planned) additions & changes 
-* [ ] Track learning rate in GUI
-* [ ] Full Super Mario World save state selections
+* [x] Track learning rate in GUI - fitness improvement percentage added
 * [ ] Enhanced speed learning mode (implementing frameskip learning)
-* [ ] Train from human input parameters
-* [ ] Update GUI
 * [ ] Modularise the code better into seperate files for the GUI and Learning algoritm
+* [ ] Update GUI
+* [ ] Train from human input parameters
+* [ ] Full Super Mario World save state selections
 
 ## Instructions from mam91's repo
 1. Install [BizHawk](https://github.com/TASVideos/BizHawk) prerequesites & emulator:
